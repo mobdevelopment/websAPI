@@ -21,7 +21,8 @@
     "serve-favicon": "~2.3.0",
     "underscore": "*",
     "bcryptjs": "*",
-    "jsonwebtoken": "^5.7.0"
+    "jsonwebtoken": "^5.7.0",
+    "async": "*"
   },
   "devDependencies": {
     "chai": "^2.1.2",

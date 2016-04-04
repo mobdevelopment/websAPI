@@ -32,6 +32,7 @@ function handleError(req, res, statusCode, message){
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var pokemons = require('./routes/pokemons');
 var admin = require('./routes/admin');
 
 var app = express();
@@ -58,6 +59,7 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/pokemon', pokemons);
 app.use('/admin', admin);
 
 // catch 404 and forward to error handler
