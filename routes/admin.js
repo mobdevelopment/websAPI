@@ -1,16 +1,18 @@
 var express = require('express');
-var _ = require('underscore');
 var router = express.Router();
-var handleError;
+var controller = require('../controller/userController.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Admin' });
 });
 
-module.exports = function (mongoose, errCallback){
-	handleError = errCallback;
-	return router;
-};
+function isLoggedIn(req, res, next) {
+	controller.checkToken(req,'supersecrethere',next, function(response){
+		res.json(response);
+	});
+}
+
+module.exports = router;
 
 //module.exports = router;

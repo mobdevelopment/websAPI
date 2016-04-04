@@ -12,18 +12,10 @@ var ConnectRoles = require('connect-roles');
 var bCrypt = require('bcryptjs');
 var User;
 
-var createHash = function(password){
-  return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-}
-
-var isValidPassword = function(user, password){
-  return bCrypt.compareSync(password, user.password);
-}
-
 var roles = new ConnectRoles({
   failureHandler: function(req, res, event){
     res.status(401);
-    res.render('noauth'); // @TODO: make .jade
+    res.render('noauth');
   }
 });
 
@@ -40,9 +32,11 @@ function handleError(req, res, statusCode, message){
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var admin = require('./routes/admin')(mongoose, handleError);
+var admin = require('./routes/admin');
 
 var app = express();
+
+require('./config/passport')(passport);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -54,70 +48,22 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+//app.use(expressSession({secret: "pikapika"}));
+//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(expressSession({secret: "pikapika", saveUninitialized: false, resave: false}));
+app.use(expressSession({secret: "pikapika", saveUninitialized: true, resave: false}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(roles.middleware());
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/admin', roles.can('access pokemons'), admin);
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-})
-
-passport.use(new localStrategy(function(username, password, done) {
-  process.nextTick(function() {
-    User = mongoose.model('User');
-    User.findOne({
-      'local.username': username,
-    }, function(err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false);
-      }
-
-      if (user.local.password != password) {
-        return done(null, false);
-      }
-      return done(null, user);
-    });
-  });
-}));
-
-app.post('/login',
-  passport.authenticate('local', {
-    successRedirect: '/users/loginSuccess',
-    failureRedirect: '/users/loginFailure',
-  })
-);  
-
-roles.use('access admin', function(req){
-  if (req.user){
-    var roles = req.user.roles;
-    if (roles.indexOf('admin') >= 0) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-});
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  res.send("Password is: " + bCrypt.hashSync("Welkom01", null, null));
+  res.send(err);
   err.status = 404;
   next(err);
 });

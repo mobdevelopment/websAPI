@@ -1,14 +1,14 @@
-extends layout
+extends ../layout
 
 block content
 	#content.col-md-12
 		#content.col-md-12
-			h1 Login
+			h1 Signup
 			p= password
 			
 	#main.col-md-12
 		div.col-md-4
-			form(action="/login" method="post")
+			form(action="/users/signup" method="post")
 				div.form-group
 					label Gebruikersnaam
 					input.form-control(type="text", name="username")
