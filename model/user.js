@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
+var Schema = mongoose.Schema;
 
-var userSchema = new mongoose.Schema({
+var userSchema = new Schema({
 	username: {type: String, required: true, index: { unique: true } },
-	password: {type: String, required: true}
+	password: {type: String, required: true},
+	pokemons: [{ type: Schema.Types.ObjectId, ref: 'Pokemon'}]
 });
 
 userSchema.methods.generateHash = function(password) {

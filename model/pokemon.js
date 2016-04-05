@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var pokemonSchema = new Schema({
-	name: {type: String, required: true, index: { unique: true } },
-	password: {type: String, required: true}
+	pid: {type: Number, required: true, index: { unique: true } },
+	name: {type: String, required: true, index: { unique: true } }
 });
 
-mongoose.model('Pokemon', pokemonSchema);
+module.exports = mongoose.model('Pokemon', pokemonSchema);

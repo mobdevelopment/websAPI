@@ -3,7 +3,7 @@ var router = express.Router();
 var controller = require('../controller/userController.js');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', isLoggedIn, function(req, res, next) {
   res.render('index', { title: 'Admin' });
 });
 

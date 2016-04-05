@@ -2,7 +2,10 @@ var express = require('express');
 var router = express.Router();
 var User = require('mongoose').model('User');
 var location = require('mongoose').model('Location');
+var Pokemon = require('mongoose').model('Pokemon');
 var passport = require('passport');
+var async = require('async');
+var http = require('http');
 //var controller = require('../controller/userController.js');
 
 if (typeof(Number.prototype.toRad) === "undefined"){
@@ -60,10 +63,6 @@ router.get('/', function(req, res){
 	var lat = parseFloat(req.query.lat);
 	var lng = parseFloat(req.query.lng);
 
-	location.count({}, function(err, count){
-		console.log(count);
-	});
-
 	location.find({}).exec(function(err, locations){
 		if (err){ return next(err); }
 
@@ -77,39 +76,80 @@ router.get('/', function(req, res){
 
 		if (filteredlocations.length < 10) {
 			var toAdd = 10 - filteredlocations.length;
+			var completed = 0;
 			console.log(toAdd);
 
 			var newlocations = [];
 			for (var i = 0; i < toAdd; i++){
 				var randomlocation = randomLocation(lat, lng);
 
-				// random id = random
-				// pokeapi/pokemon/:randomid
-
-				var newlocation = //new location({
-					{
-					"lat": randomlocation.lat,
-					"lng": randomlocation.lng,
-					"pid": 0,
-					"name": "Pikachu",
+				var randomId = Math.floor(Math.random() * (720 - 1)) + 1;
+				console.log(randomId);
+				var pokemon;
+				var options = {
+					host: 'pokeapi.co',
+					port: 80,
+					path: '/api/v2/pokemon/' + randomId,
+					method: 'GET'
 				};
 
-				newlocations.push(newlocation);
-			}
+				http.get(options, function(response) {
+					var content = '';
 
-			location.collection.insert(newlocations, function (err, docs){
-				if (err){
-					console.log("err: " + err);
-				} else {
-					docs.ops.forEach(function(doc){
-						filteredlocations.push(doc);
+					response.on('data', function (chunk) {
+						//content += chunk;
+
+						var object = JSON.parse(chunk);
+
+						newlocations.push({
+							"lat": randomlocation.lat,
+							"lng": randomlocation.lng,
+							"pid": object.id,
+							"name": object.name
+						});
 					});
-					return res.json(filteredlocations);
-				}
-			});
+
+					response.on('end', function () {
+						console.log(newlocations);
+						/*var object = JSON.parse(data);
+
+						newlocations.push({
+							"lat": randomlocation.lat,
+							"lng": randomlocation.lng,
+							"pid": object.id,
+							"name": object.name
+						});*/
+						completed++;
+						console.log("completed: " + completed);
+
+						if (completed == toAdd){
+							console.log(JSON.parse(newlocations));
+							location.collection.insert(newlocations, function (err, docs){
+								if (err){
+									console.log("err: " + err);
+								} else {
+									docs.ops.forEach(function(doc){
+										locations.push(doc);
+									});
+									return res.json(locations);
+								}
+							});
+						}
+					});
+				});
+
+				/*var newlocation = {
+					"lat": randomlocation.lat,
+					"lng": randomlocation.lng,
+					"pid": pokemon.pid,
+					"name": pokemon.name,
+				};
+
+				newlocations.push(newlocation);*/
+			}			
 		} else {
 			console.log('niets toegevoegd');
-			return res.json(filteredlocations);
+			return res.json(dlocations);
 		}
 	});
 	
@@ -131,12 +171,31 @@ router.get('/', function(req, res){
 // Pokemon catch at location method
 router.post('/', function(req, res){
 	var post = req.body;
+
+	if (req.user === undefined){
+		res.status(401).json("No logged in user found");
+	}
+
+	var user = req.user;
+
 	// Case 
-	var catched = (post.catched == "true" ? true : false);
+	var catched = (post.caught == "true" ? true : false);
 
 	if (catched){
+		var pokemonId = post.pokemon.pid;
+
+		Pokemon.findOne({ pid: pokemonId }).exec(function(err, doc){
+		//Pokemon.findById(post._id, function(err, doc){
+			//return res.json(user);
+			user.pokemons.push(doc);
+
+			user.save();
+
+			res.json(req.user);
+		})
+
 		// Add to user
-		res.status(418).json("Not yet implemented");
+		//res.status(418).json("Not yet implemented");
 	} else {
 		location.findById(post._id, function(err, foundLocation){
 			newlocation = randomLocation(foundLocation.lat, foundLocation.lng);
@@ -148,6 +207,10 @@ router.post('/', function(req, res){
 			res.status(200).json(foundLocation);
 		});
 	}
+});
+
+router.get('/pokedex', function(req, res){
+	res.json(req.user);
 });
 
 // DEBUG ROUTE

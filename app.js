@@ -26,6 +26,7 @@ mongoose.connect('mongodb://IMarks:pikapika@ds031852.mlab.com:31852/pokedex');
 
 require('./model/user')(mongoose);
 require('./model/location')(mongoose);
+require('./model/pokemon')(mongoose);
 
 function handleError(req, res, statusCode, message){
   res.status(statusCode);
