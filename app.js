@@ -39,6 +39,8 @@ var pokemons = require('./routes/pokemons');
 var admin = require('./routes/admin');
 
 var app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 require('./config/passport')(passport);
 
@@ -54,7 +56,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(expressSession({secret: "pikapika"}));
 //app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(expressSession({secret: "pikapika", saveUninitialized: true, resave: false}));
 app.use(passport.initialize());
@@ -69,7 +70,6 @@ app.use('/admin', admin);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  res.send(err);
   err.status = 404;
   next(err);
 });

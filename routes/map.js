@@ -64,15 +64,6 @@ router.get('/', function(req, res){
 		console.log(count);
 	});
 
-	function onInsert(err, docs){
-		if (err){
-			console.log("err: " + err);
-		} else {
-			filteredlocations.push(docs);
-			res.json(filteredlocations);
-		}
-	}
-
 	location.find({}).exec(function(err, locations){
 		if (err){ return next(err); }
 
@@ -92,21 +83,31 @@ router.get('/', function(req, res){
 			for (var i = 0; i < toAdd; i++){
 				var randomlocation = randomLocation(lat, lng);
 
-				var newlocation = new location({
+				var newlocation = //new location({
+					{
 					"lat": randomlocation.lat,
 					"lng": randomlocation.lng,
 					"pid": 0,
 					"name": "Pikachu",
-				});
+				};
 
 				newlocations.push(newlocation);
 			}
 
-			console.log(newlocations);
-			console.log("doing it again");
-			location.collection.insert(newlocations, onInsert);
+			location.collection.insert(newlocations, function (err, docs){
+				if (err){
+					console.log("err: " + err);
+				} else {
+					docs.ops.forEach(function(doc){
+						filteredlocations.push(doc);
+					});
+					return res.json(filteredlocations);
+				}
+			});
+		} else {
+			console.log('niets toegevoegd');
+			return res.json(filteredlocations);
 		}
-
 	});
 	
 	/*var results = {};
@@ -126,7 +127,18 @@ router.get('/', function(req, res){
 
 // Pokemon catch at location method
 router.post('/', function(req, res){
+	var post = req.body;
 	// Case 
+	var catched = (post.catched == "true" ? true : false);
+
+	if (catched){
+		// Add to user
+		res.json(true);
+	} else {
+		location.findById(post._id, function(err, foundLocation){
+			res.json(foundLocation);
+		});
+	}
 });
 
 // DEBUG ROUTE
