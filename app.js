@@ -11,6 +11,7 @@ var localStrategy = require('passport-local').Strategy;
 var ConnectRoles = require('connect-roles');
 var bCrypt = require('bcryptjs');
 var User;
+var location;
 
 var roles = new ConnectRoles({
   failureHandler: function(req, res, event){
@@ -24,6 +25,7 @@ mongoose.connect('mongodb://IMarks:pikapika@ds031852.mlab.com:31852/pokedex');
 //mongoose.connect('mongodb://localhost:27017/assessment');
 
 require('./model/user')(mongoose);
+require('./model/location')(mongoose);
 
 function handleError(req, res, statusCode, message){
   res.status(statusCode);
@@ -32,6 +34,7 @@ function handleError(req, res, statusCode, message){
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var map = require('./routes/map');
 var pokemons = require('./routes/pokemons');
 var admin = require('./routes/admin');
 
@@ -59,6 +62,7 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/map', map);
 app.use('/pokemon', pokemons);
 app.use('/admin', admin);
 
