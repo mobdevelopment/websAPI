@@ -83,6 +83,9 @@ router.get('/', function(req, res){
 			for (var i = 0; i < toAdd; i++){
 				var randomlocation = randomLocation(lat, lng);
 
+				// random id = random
+				// pokeapi/pokemon/:randomid
+
 				var newlocation = //new location({
 					{
 					"lat": randomlocation.lat,
@@ -133,10 +136,16 @@ router.post('/', function(req, res){
 
 	if (catched){
 		// Add to user
-		res.json(true);
+		res.status(418).json("Not yet implemented");
 	} else {
 		location.findById(post._id, function(err, foundLocation){
-			res.json(foundLocation);
+			newlocation = randomLocation(foundLocation.lat, foundLocation.lng);
+
+			foundLocation.lat = newlocation.lat;
+			foundLocation.lng = newlocation.lng;
+
+			foundLocation.save();
+			res.status(200).json(foundLocation);
 		});
 	}
 });
