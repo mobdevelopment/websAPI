@@ -94,11 +94,8 @@ router.get('/', function(req, res){
 				};
 
 				http.get(options, function(response) {
-					var content = '';
 
 					response.on('data', function (chunk) {
-						//content += chunk;
-
 						var object = JSON.parse(chunk);
 
 						newlocations.push({
@@ -111,14 +108,7 @@ router.get('/', function(req, res){
 
 					response.on('end', function () {
 						console.log(newlocations);
-						/*var object = JSON.parse(data);
 
-						newlocations.push({
-							"lat": randomlocation.lat,
-							"lng": randomlocation.lng,
-							"pid": object.id,
-							"name": object.name
-						});*/
 						completed++;
 						console.log("completed: " + completed);
 
@@ -137,16 +127,7 @@ router.get('/', function(req, res){
 						}
 					});
 				});
-
-				/*var newlocation = {
-					"lat": randomlocation.lat,
-					"lng": randomlocation.lng,
-					"pid": pokemon.pid,
-					"name": pokemon.name,
-				};
-
-				newlocations.push(newlocation);*/
-			}			
+			}
 		} else {
 			console.log('niets toegevoegd');
 			return res.json(dlocations);
