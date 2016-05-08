@@ -68,6 +68,7 @@ router.get('/', function(req, res){
 
 		var filteredlocations = [];
 		locations.forEach(function(fetchedLocation) {
+			console.log(fetchedLocation);
 			distance = calcDistance(fetchedLocation.lat, fetchedLocation.lng, lat, lng);
 			if (distance < 1000){
 				filteredlocations.push(fetchedLocation);
@@ -94,9 +95,15 @@ router.get('/', function(req, res){
 				};
 
 				http.get(options, function(response) {
+					var data = '';
+					response.on('data', function (d) {
+						console.log("chuck:" + d);
+						data += d;
+					});
 
-					response.on('data', function (chunk) {
-						var object = JSON.parse(chunk);
+					response.on('end', function () {
+						console.log("data:" + data);
+						/*var object = JSON.parse(chunk);
 
 						newlocations.push({
 							"lat": randomlocation.lat,
@@ -104,11 +111,6 @@ router.get('/', function(req, res){
 							"pid": object.id,
 							"name": object.name
 						});
-					});
-
-					response.on('end', function () {
-						console.log(newlocations);
-
 						completed++;
 						console.log("completed: " + completed);
 
@@ -124,7 +126,7 @@ router.get('/', function(req, res){
 									return res.json(locations);
 								}
 							});
-						}
+						}*/
 					});
 				});
 			}
