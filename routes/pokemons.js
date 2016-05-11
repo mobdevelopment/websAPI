@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var async = require('async');
 var http = require('http');
+var Pokemon = require('mongoose').model('Pokemon');
 
 function getPokemon(req, res, callback){
 	var startDate = new Date();
@@ -41,10 +42,40 @@ router.get('/', function(req, res) {
 	var results = {};
 
 	getPokemon(req, res, function(pokemons){
+		var count = 0;
 		pokemons.results.forEach(function(pokemon){
+
+			count++;
 			// Fetch every pokemon
+			Pokemon.find({pid: count}, function(err, docs) {
+				if (!docs || !docs.length){
+					var pokemonModel = new Pokemon({
+						pid  : count,
+						name : pokemon.name
+					});
+
+					pokemonModel.save(function(err){
+						//cb(err, pokemon);
+						//console.log('we saved ' + pokemonModel.pid + ":" + pokemonModel.name + ' to the db');
+
+					});
+				}
+			});
+			
+
 			pokemon.isCatched = false;
+			if (user = req.user){
+				console.log('Your logged in');
+				console.log(user);
+				var isCatched = user.pokemons.filter(function(){
+					return this.pid == count;
+				});
+				if (isCatched && isCatched.length) pokemon.isCatched = true;
+
+			}
 		});
+		
+
 		results.results = pokemons.results;
 
 		results.totalRequestTime = (new Date() - startDate);
