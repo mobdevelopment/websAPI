@@ -63,6 +63,8 @@ router.get('/', function(req, res){
 	var lat = parseFloat(req.query.lat);
 	var lng = parseFloat(req.query.lng);
 
+	var requiredWithinRange = 10;
+
 	location.find({}).exec(function(err, locations){
 		if (err){ return next(err); }
 
@@ -75,64 +77,45 @@ router.get('/', function(req, res){
 			}
 		});
 
-		if (filteredlocations.length < 10) {
-			var toAdd = 10 - filteredlocations.length;
+		if (filteredlocations.length < requiredWithinRange) {
+			var toAdd = requiredWithinRange - filteredlocations.length;
 			var completed = 0;
 			console.log(toAdd);
 
 			var newlocations = [];
 			for (var i = 0; i < toAdd; i++){
 				var randomlocation = randomLocation(lat, lng);
-
-				var randomId = Math.floor(Math.random() * (720 - 1)) + 1;
-				console.log(randomId);
-				var pokemon;
-				var options = {
-					host: 'pokeapi.co',
-					port: 80,
-					path: '/api/v2/pokemon/' + randomId,
-					method: 'GET'
-				};
-
-				http.get(options, function(response) {
-					var data = '';
-					response.on('data', function (d) {
-						console.log("chuck:" + d);
-						data += d;
-					});
-
-					response.on('end', function () {
-						console.log("data:" + data);
-						/*var object = JSON.parse(chunk);
-
-						newlocations.push({
-							"lat": randomlocation.lat,
-							"lng": randomlocation.lng,
-							"pid": object.id,
-							"name": object.name
-						});
-						completed++;
-						console.log("completed: " + completed);
-
-						if (completed == toAdd){
-							console.log(JSON.parse(newlocations));
-							location.collection.insert(newlocations, function (err, docs){
-								if (err){
-									console.log("err: " + err);
-								} else {
-									docs.ops.forEach(function(doc){
-										locations.push(doc);
-									});
-									return res.json(locations);
-								}
-							});
-						}*/
-					});
+				newlocations.push({
+					lat: randomlocation.lat,
+					lng: randomlocation.lng,
 				});
 			}
+
+			var callbacks = 0;
+
+			async.forEach(newlocations, function(item, callback){
+				Pokemon.findOne().skip(Math.random() * 720).exec(function(err, result){
+					item.pid = result.pid;
+					item.name = result.name;
+
+					location.collection.insert(item, function(err, docs){
+						if (err) console.log("fout opgetreden: " + err);
+					});
+					filteredlocations.push(item);
+
+					callbacks++;
+					if (callbacks == toAdd){
+						res.json(filteredlocations);
+						console.log("reached the end");
+					} else {
+						console.log("reached " + callbacks);
+					}
+				});				
+			});
+
 		} else {
 			console.log('niets toegevoegd');
-			return res.json(dlocations);
+			return res.json(filteredlocations);
 		}
 	});
 	
