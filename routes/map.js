@@ -101,11 +101,11 @@ router.get('/', function(req, res){
 					location.collection.insert(item, function(err, docs){
 						if (err) console.log("fout opgetreden: " + err);
 					});
-					filteredlocations.push(item);
+					locations.push(item);
 
 					callbacks++;
 					if (callbacks == toAdd){
-						res.json(filteredlocations);
+						res.json(locations);
 						console.log("reached the end");
 					} else {
 						console.log("reached " + callbacks);
@@ -115,7 +115,7 @@ router.get('/', function(req, res){
 
 		} else {
 			console.log('niets toegevoegd');
-			return res.json(filteredlocations);
+			return res.json(locations);
 		}
 	});
 	
