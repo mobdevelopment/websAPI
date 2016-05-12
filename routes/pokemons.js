@@ -18,6 +18,7 @@ function getPokemon(req, res, callback){
 	} else {
 		options.path += '?limit=720'
 	}
+	console.log(options);
 
 	http.get(options, function(response) {
 		var content = '';
@@ -27,12 +28,18 @@ function getPokemon(req, res, callback){
 		});
 
 		response.on('end', function () {
-			var object = JSON.parse(content);
+			if (content){
+				var object = JSON.parse(content);
 
-			callback({
-				results: object.results
-				//requestTime: (new Date() - startDate)
-			});
+				callback({
+					results: object.results
+					//requestTime: (new Date() - startDate)
+				});
+			} else {
+				callback({
+					results: [],
+				})
+			}
 		});
 	});
 }
@@ -65,8 +72,6 @@ router.get('/', function(req, res) {
 
 			pokemon.isCatched = false;
 			if (user = req.user){
-				console.log('Your logged in');
-				console.log(user);
 				var isCatched = user.pokemons.filter(function(){
 					return this.pid == count;
 				});
@@ -84,14 +89,15 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:id', function(req, res, next){
-	if (data !== parseInt(req.params.id)){
-		res.status(500);
-		res.json("Not an valid id");
+	var startDate = new Date();
+	var data = parseInt(req.params.id);
+	if (!data){
+		return res.status(500).json("Not an valid id");
 	}
 
 	getPokemon(req, res, function(pokemons) {
-		results.totalRequestTime = (new Date() - startDate);
-		res.json(results);
+		pokemons.totalRequestTime = (new Date() - startDate);
+		return res.status(200).json(pokemons);
 	});
 });
 
