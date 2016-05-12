@@ -80,7 +80,6 @@ router.get('/', function(req, res){
 		if (filteredlocations.length < requiredWithinRange) {
 			var toAdd = requiredWithinRange - filteredlocations.length;
 			var completed = 0;
-			console.log(toAdd);
 
 			var newlocations = [];
 			for (var i = 0; i < toAdd; i++){
@@ -105,32 +104,15 @@ router.get('/', function(req, res){
 
 					callbacks++;
 					if (callbacks == toAdd){
-						res.json(locations);
-						console.log("reached the end");
-					} else {
-						console.log("reached " + callbacks);
+						return res.status(200).json(locations);
 					}
 				});				
 			});
 
 		} else {
-			console.log('niets toegevoegd');
-			return res.json(locations);
+			return res.status(200).json(locations);
 		}
 	});
-	
-	/*var results = {};
-
-	// Test data
-	// lat: 51,688596111632876
-	// lng: 5,285614259464238
-	var lat = 51.688596111632876;
-	var lng = 5.285614259464238;
-
-	randomLocation(lat, lng, function(randomLocation){
-		results.result = randomLocation;
-		res.json(results);
-	})*/
 });
 
 
@@ -157,11 +139,8 @@ router.post('/', function(req, res){
 
 			user.save();
 
-			res.json(req.user);
+			return res.status(200).json(req.user);
 		})
-
-		// Add to user
-		//res.status(418).json("Not yet implemented");
 	} else {
 		location.findById(post._id, function(err, foundLocation){
 			newlocation = randomLocation(foundLocation.lat, foundLocation.lng);
@@ -170,7 +149,7 @@ router.post('/', function(req, res){
 			foundLocation.lng = newlocation.lng;
 
 			foundLocation.save();
-			res.status(200).json(foundLocation);
+			return res.status(200).json(foundLocation);
 		});
 	}
 });
@@ -188,8 +167,6 @@ router.get('/distance', function(req, res){
 	var results = {};
 
 	distance = calcDistance(lat1, lng1, lat2, lng2)
-	
-	//results.distance = difference;
 	res.json(distance);
 });
 
