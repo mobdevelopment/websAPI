@@ -21,26 +21,19 @@ function getPokemon(req, res, callback){
 	console.log(options);
 
 	http.get(options, function(response) {
-		var body = '';
+		var d = '';
 
 		response.on('data', function (chunk) {
-			body += chunk;
+			d += chunk;
 		});
 
 		response.on('end', function () {
-			//if (content){
-				var object = JSON.parse(body);
+			var object = JSON.parse(d);
 
-				callback({
-					results: object.results
-					//requestTime: (new Date() - startDate)
-				});
-			/*} else {
-				console.log(response);
-				callback({
-					results: [],
-				})
-			}*/
+			callback({
+				results: object.results
+				//requestTime: (new Date() - startDate)
+			});
 		});
 	})
 }
