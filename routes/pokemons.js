@@ -14,34 +14,35 @@ function getPokemon(req, res, callback){
 	};
 
 	if (req.params.id){
-		options.path += req.params.id;
+		options.path += parseInt(req.params.id).toString() + '/'
 	} else {
 		options.path += '?limit=720'
 	}
 	console.log(options);
 
 	http.get(options, function(response) {
-		var content = '';
+		var body = '';
 
 		response.on('data', function (chunk) {
-			content += chunk;
+			body += chunk;
 		});
 
 		response.on('end', function () {
-			if (content){
-				var object = JSON.parse(content);
+			//if (content){
+				var object = JSON.parse(body);
 
 				callback({
 					results: object.results
 					//requestTime: (new Date() - startDate)
 				});
-			} else {
+			/*} else {
+				console.log(response);
 				callback({
 					results: [],
 				})
-			}
+			}*/
 		});
-	});
+	})
 }
 
 router.get('/', function(req, res) {
