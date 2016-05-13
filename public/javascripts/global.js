@@ -11,6 +11,8 @@ $(document).ready(function() {
     $('#locationList table tbody').on('click', 'td a.linkshowlocation', showLocationInfo);
 
     $('#btnAddLocation').on('click', addLocation);
+
+    $('#locationList table tbody').on('click', 'td a.linkdeletelocation', deleteLocation);
 });
 
 // Functions =============================================================
@@ -33,7 +35,7 @@ function populateTable() {
             tableContent += '<td><a href="#" class="linkshowlocation" rel="' + this.name + '">' + this.name + '</a></td>';
             tableContent += '<td>' + this.lat + '</td>';
             tableContent += '<td>' + this.lng + '</td>';
-            tableContent += '<td><a href="#" class="linkdeletelocation" rel="' + this._id + '">delete</a></td>';
+            tableContent += '<td><a href="#" class="linkdeletelocation" rel="' + this.pid + '">delete</a></td>';
             tableContent += '</tr>';
         });
 
@@ -99,6 +101,7 @@ function addLocation(event) {
                 // Update the table
                 populateTable();
 
+                console.log('refreshed the location set');
             }
             else {
 
@@ -113,4 +116,43 @@ function addLocation(event) {
         alert('Please fill in all fields');
         return false;
     }
+};
+
+// Delete User
+function deleteLocation(event) {
+
+    event.preventDefault();
+
+    // Pop up a confirmation dialog
+    var confirmation = confirm('Are you sure you want to delete this loation?');
+
+    // Check and make sure the user confirmed
+    if (confirmation === true) {
+
+        // If they did, do our delete
+        $.ajax({
+            type: 'DELETE',
+            url: '/admin/deletelocation/' + $(this).attr('rel')
+        }).done(function( response ) {
+
+            // Check for a successful (blank) response
+            if (response.msg === '') {
+            }
+            else {
+                alert('Error: ' + response.msg);
+            }
+
+            // Update the table
+            populateTable();
+
+        });
+
+    }
+    else {
+
+        // If they said no to the confirm, do nothing
+        return false;
+
+    }
+
 };

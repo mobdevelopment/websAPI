@@ -27,6 +27,13 @@ router.post('/addlocation', function(req, res){
 	});
 });
 
+router.delete('/deletelocation/:id', function(req, res){
+	var locationToDelete = req.params.id;
+	location.delete({ 'pid' : locationToDelete}, function(err){
+		res.send((err === null) ? { msg: '' } : { msg:'error: ' + err });
+	});
+});
+
 function isLoggedIn(req, res, next) {
 	controller.checkToken(req,'supersecrethere',next, function(response){
 		res.json(response);
