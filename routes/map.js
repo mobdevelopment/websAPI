@@ -130,7 +130,7 @@ router.post('/', function(req, res){
 	var catched = (post.caught == "true" ? true : false);
 
 	if (catched){
-		var pokemonId = post.pokemon.pid;
+		var pokemonId = post.pid;
 
 		Pokemon.findOne({ pid: pokemonId }).exec(function(err, doc){
 		//Pokemon.findById(post._id, function(err, doc){
