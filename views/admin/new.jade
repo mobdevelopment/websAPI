@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+	h1.
+		Location List
+	table
+		thead
+			tr
+				th pid
+				th name
+				th lat
+				th lng
+				th Delete?
+		each location, i in locations
+			tr
+				td= location.pid
+				td= location.name
+				td= location.lat
+				td= location.lng

@@ -5,13 +5,26 @@ var location = require('mongoose').model('Location');
 
 /* GET home page. */
 router.get('/', isLoggedIn, function(req, res, next) {
+	res.render('admin/index', {
+		"title" : 'Pokemon locatie beheer'
+	});
+});
+
+router.get('/locationlist', function(req, res){
 	location.find({}).exec(function(e, docs){
 		if(e) return res.status(500).json('error occured');
 
-  		res.render('admin/index', {
-			"locations" : docs
-  		});
+  		res.json(docs);
 	})
+});
+
+router.post('/addlocation', function(req, res){
+	console.log(req.body);
+	location.collection.insert(req.body, function(err, result){
+		res.send(
+			(err === null) ? { msg: '' } : { msg: err}
+		);
+	});
 });
 
 function isLoggedIn(req, res, next) {
