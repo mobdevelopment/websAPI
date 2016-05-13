@@ -79,9 +79,9 @@ function addLocation(event) {
         // If it is, compile all user info into one object
         var newLocation = {
             'pid': $('#addLocation fieldset input#inputLocationPid').val(),
-            'name': $('#addLocation fieldset input#inputaddLocationName').val(),
-            'lat': $('#addLocation fieldset input#inputaddLocationLat').val(),
-            'lng': $('#addLocation fieldset input#inputaddLocationLng').val(),
+            'name': $('#addLocation fieldset input#inputLocationName').val(),
+            'lat': $('#addLocation fieldset input#inputLocationLat').val(),
+            'lng': $('#addLocation fieldset input#inputLocationLng').val(),
         }
 
         // Use AJAX to post the object to our adduser service

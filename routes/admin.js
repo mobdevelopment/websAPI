@@ -20,16 +20,25 @@ router.get('/locationlist', function(req, res){
 
 router.post('/addlocation', function(req, res){
 	console.log(req.body);
-	location.collection.insert(req.body, function(err, result){
+
+	var newlocation = new location(req.body);
+
+	newlocation.save(function(err, doc){
+		//if (err) return err;
+
+		res.status(200).send((err === null) ? { msg: '' } : { msg: err});
+		//res.status(200).json("Succesfully saved the new location");
+	});
+	/*location.collection.insert(req.body, function(err, result){
 		res.send(
 			(err === null) ? { msg: '' } : { msg: err}
 		);
-	});
+	});*/
 });
 
 router.delete('/deletelocation/:id', function(req, res){
 	var locationToDelete = req.params.id;
-	location.delete({ 'pid' : locationToDelete}, function(err){
+	location.remove({ 'pid' : locationToDelete}).exec(function(err){
 		res.send((err === null) ? { msg: '' } : { msg:'error: ' + err });
 	});
 });
