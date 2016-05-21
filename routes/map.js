@@ -57,7 +57,7 @@ router.get('/', function(req, res){
 	var startDate = new Date();
 
 	if (!req.query.lat || !req.query.lng){
-		res.status(400).json("Your location has not been included");
+		return res.status(400).json("Your location has not been included");
 	}
 
 	var lat = parseFloat(req.query.lat);
