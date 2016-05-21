@@ -12,9 +12,8 @@ function getPokemon(req, res, callback){
 		path: '/api/v2/pokemon/',
 		method: 'GET'
 	};
-
 	if (req.params.id){
-		options.path += parseInt(req.params.id).toString() + '/'
+		options.path += req.params.id.toString() + '/'
 	} else {
 		options.path += '?limit=720'
 	}
@@ -24,16 +23,25 @@ function getPokemon(req, res, callback){
 		var d = '';
 
 		response.on('data', function (chunk) {
+					// console.log("Response:: "+chunk);
 			d += chunk;
 		});
 
 		response.on('end', function () {
-			var object = JSON.parse(d);
 
-			callback({
-				results: object.results
-				//requestTime: (new Date() - startDate)
-			});
+			var object = JSON.parse(d);
+			// console.log("OBJECT:: "+object.results);
+			if (req.params.id) {
+				callback({
+					results: object
+					//requestTime: (new Date() - startDate)
+				});
+			} else {
+				callback({
+					results: object.results
+					//requestTime: (new Date() - startDate)
+				});
+			}
 		});
 	})
 }
@@ -84,7 +92,7 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res, next){
 	var startDate = new Date();
-	var data = parseInt(req.params.id);
+	var data = req.params.id;
 	if (!data){
 		return res.status(500).json("Not an valid id");
 	}
@@ -94,5 +102,65 @@ router.get('/:id', function(req, res, next){
 		return res.status(200).json(pokemons);
 	});
 });
+
+function getTypes(req, res, callback) {
+	var startDate = new Date();
+	var options = {
+		host: 'pokeapi.co',
+		port: 80,
+		path: '/api/v2/types/',
+		method: 'GET'
+	};
+	if (req.params.id){
+		options.path += req.params.typeId.toString() + '/'
+	}
+	console.log(options);
+
+	http.get(options, function(response) {
+		var d = '';
+
+		response.on('data', function (chunk) {
+					// console.log("Response:: "+chunk);
+			d += chunk;
+		});
+
+		response.on('end', function () {
+
+			var object = JSON.parse(d);
+			// console.log("OBJECT:: "+object.results);
+			if (req.params.id) {
+				callback({
+					results: object.results
+					//requestTime: (new Date() - startDate)
+				});
+			} else {
+				callback({
+					results: object.results
+					//requestTime: (new Date() - startDate)
+				});
+			}
+		});
+	})
+}
+
+router.get('/:id/types/:typeId*?', function(req, res, next) {
+	var startDate = new Date();
+	if(req.params.typeId) {
+
+	} else {
+
+	}
+	console.log("grir");
+	return res;
+
+	results.results = pokemons.results;
+
+	results.totalRequestTime = (new Date() - startDate);
+	res.json(results);
+});
+
+// router.get('/:id/types/:typeId', function(req, res, next) {
+// 	return res;
+// });
 
 module.exports = router;
