@@ -27,6 +27,7 @@ mongoose.connect('mongodb://IMarks:pikapika@ds031852.mlab.com:31852/pokedex');
 require('./model/user')(mongoose);
 require('./model/location')(mongoose);
 require('./model/pokemon')(mongoose);
+require('./model/type')(mongoose);
 
 function handleError(req, res, statusCode, message){
   res.status(statusCode);
@@ -37,6 +38,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var map = require('./routes/map');
 var pokemons = require('./routes/pokemons');
+var types = require('./routes/types');
 var admin = require('./routes/admin');
 
 var app = express();
@@ -68,6 +70,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/map', map);
 app.use('/pokemon', pokemons);
+app.use('/type', types);
 app.use('/admin', admin);
 
 // catch 404 and forward to error handler
