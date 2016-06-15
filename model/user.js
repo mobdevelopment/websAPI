@@ -8,6 +8,10 @@ var userSchema = new Schema({
 	pokemons: [{ type: Schema.Types.ObjectId, ref: 'Pokemon'}]
 });
 
+userSchema.path('username').required(true, 'username cannot be empty');
+userSchema.path('password').required(true, 'password cannot be empty');
+
+
 userSchema.methods.generateHash = function(password) {
 	return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 }

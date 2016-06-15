@@ -6,4 +6,8 @@ var typeSchema = new Schema({
 	name: {type: String, required: true, index: { unique: true } }
 });
 
+typeSchema.path('tid').required(true, 'type id cannot be empty');
+typeSchema.path('name').required(true, 'type name cannot be empty');
+
+
 module.exports = mongoose.model('Type', typeSchema);

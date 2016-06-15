@@ -25,6 +25,7 @@ mongoose.connect('mongodb://IMarks:pikapika@ds031852.mlab.com:31852/pokedex');
 //mongoose.connect('mongodb://localhost:27017/assessment');
 
 require('./model/user')(mongoose);
+require('./model/roles')(mongoose);
 require('./model/location')(mongoose);
 require('./model/pokemon')(mongoose);
 require('./model/type')(mongoose);

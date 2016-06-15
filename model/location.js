@@ -7,4 +7,9 @@ var locationSchema = new mongoose.Schema({
 	name: {type: String, required: true}
 });
 
+locationSchema.path('lat').required(true, 'latitude cannot be empty');
+locationSchema.path('lng').required(true, 'longitude cannot be empty');
+locationSchema.path('pid').required(true, 'pokemon id cannot be empty');
+locationSchema.path('name').required(true, 'pokemon name cannot be empty');
+
 module.exports = mongoose.model('Location', locationSchema);
