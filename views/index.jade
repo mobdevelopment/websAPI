@@ -1,5 +1,121 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	h1 Users
+	hr
+
+	h2 POST /users/signup
+	p
+	| In de body van de post request wordt de volgende data meegestuurd: <br/>
+	| username: {“your username”} <br/>
+	| password: {“your password”} <br/>
+
+	p.
+	| Retourneert een response in de volgende structuur wanneer een user succesvol is aangemaakt:
+	| { <br/>
+	| 	"message": "account created succesful" <br/>
+	| } <br/>
+
+	h2 POST /users/login
+	p.
+	| In de body van de post request wordt de volgende data meegestuurd: <br/>
+	| username: {“your username”} <br/>
+	| password: {“your password”} <br/>
+
+	p.
+	| Retourneert een response in de volgende structuur wanneer een user succesvol is ingelogd: <br/>
+	| { <br/>
+	|	"success": true, <br/>
+	|	"message": "enjoy your token", <br/>
+	|	"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..udonoETjva7hDBWwPHf4Zb2Zrn_8b9z6ocow1JY6rHk" <br/>
+	|}
+
+	h1 Admin
+	hr
+
+	h2 GET /admin/
+	p.
+		HTML response (alleen zichtbaar wanneer een admin is ingelogd.) <br/>
+		Een overzicht van de pokemon locaties in human-readable format
+
+	h2 GET /admin/locationlist
+	p.
+		HTML response (alleen zichtbaar wanneer een admin is ingelogd.) <br/>
+		Een overzicht van de pokemon locaties in human-readable format
+
+	h1 Pokemon
+	hr
+
+	h2 GET /pokemon/
+	p.
+		Retourneert een collectie van pokemon in de volgende structuur: <br/>
+		{ <br/>
+			"name": "bulbasaur", <br/>
+			"url": "http://pokeapi.co/api/v2/pokemon/1/", <br/>
+			"isCatched": false <br/>
+		}
+
+	h2 GET /pokemon/:name
+	p.
+	| Retourneert de gegevens van de pokemon in de volgende structuur: <br/>
+	| { <br/>
+	| 	"id": 129, <br/>
+	| 	"name": "magikarp", <br/>
+	| 	"height": 9, <br/>
+	| 	"is_default": true, <br/>
+	| 	"order": 172, <br/>
+	| 	"weight": 100, <br/>
+	| 	"abilities": [ <br/>
+	|     	{ <br/>
+	|         		"is_hidden": true, <br/>
+	|         		"slot": 3, <br/>
+	|         		"ability": { <br/>
+	|             		"name": "rattled", <br/>
+	|             		"url": "http://pokeapi.co/api/v2/ability/155/" <br/>
+	|         		} <br/>
+	|     	}, <br/>
+	|     	... <br/>
+	| 	], <br/>
+	| 	"stats": [ <br/>
+	|     	{ <br/>
+	|         		"base_stat": 80, <br/>
+	|         		"effort": 1, <br/>
+	|         		"stat": { <br/>
+	|             		"name": "speed", <br/>
+	|             		"url": "http://pokeapi.co/api/v2/stat/6/" <br/>
+	|         		} <br/>
+	|     	}, <br/>
+	|     	... <br/>
+	| 	], <br/>
+	| 	"types": [ <br/>
+	|     	{ <br/>
+	|         		"slot": 1, <br/>
+	|         		"type": { <br/>
+	|             		"name": "water", <br/>
+	|             		"url": "http://pokeapi.co/api/v2/type/11/" <br/>
+	|         		} <br/>
+	|     	} <br/>
+	| 	] <br/>
+	| } <br/>
+
+	h1 Map
+	hr
+
+	h2 GET /map?lat={latitude}&lng={longitude}
+	p.
+		Genereert Pokemon in de omgeving van de meegegeven coordinaten en retourneert de collectie van wilde pokemon in de volgende structuur: <br/>
+		{ <br/>
+			"_id": "573398a4f40a5110994847e", <br/>
+			"lat": "51.59327734885365", <br/>
+			"lng": "5.088396816863008", <br/>
+			"pid": "1", <br/>
+			"name": "bulbasaur" <br/>
+		}
+
+
+	h2 POST /map
+	p.
+		Wordt gebruikt om aan te geven of een pokemon gevangen is. <br/>
+		In de body van de post request wordt de volgende data meegestuurd: <br/>
+		caught: {“true | false”} <br/>
+		pokemon: {“_id”} geen pokemon nummer

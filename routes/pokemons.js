@@ -12,8 +12,8 @@ function getPokemon(req, res, callback){
 		path: '/api/v2/pokemon/',
 		method: 'GET'
 	};
-	if (req.params.id){
-		options.path += req.params.id.toString() + '/'
+	if (req.params.name){
+		options.path += req.params.name.toString() + '/'
 	} else {
 		options.path += '?limit=720'
 	}
@@ -31,7 +31,7 @@ function getPokemon(req, res, callback){
 
 			var object = JSON.parse(d);
 			// console.log("OBJECT:: "+object.results);
-			if (req.params.id) {
+			if (req.params.name) {
 				callback({
 					results: object
 					//requestTime: (new Date() - startDate)
@@ -90,11 +90,11 @@ router.get('/', function(req, res) {
 	});
 });
 
-router.get('/:id', function(req, res, next){
+router.get('/:name', function(req, res, next){
 	var startDate = new Date();
-	var data = req.params.id;
+	var data = req.params.name;
 	if (!data){
-		return res.status(500).json("Not an valid id");
+		return res.status(500).json("Not an valid identifier");
 	}
 
 	getPokemon(req, res, function(pokemons) {
