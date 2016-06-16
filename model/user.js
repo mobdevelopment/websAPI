@@ -26,7 +26,7 @@ var userSchema = new Schema({
 		name: { type: String, required: false },
 	},
 	pokemons: [{ type: Schema.Types.ObjectId, ref: 'Pokemon'}],
-	role: [{ type: Schema.Types.ObjectId, ref: 'Role'}]
+	Admin: Boolean
 });
 
 // userSchema.path('username').required(true, 'username cannot be empty');
@@ -39,6 +39,10 @@ userSchema.methods.generateHash = function(password) {
 
 userSchema.methods.validPassword = function(password) {
 	return bcrypt.compareSync(password, this.local.password);
+}
+
+userSchema.methods.hasAnyRole = function(role) {
+	if(!Array.isArray)
 }
 
 module.exports = mongoose.model('User', userSchema);

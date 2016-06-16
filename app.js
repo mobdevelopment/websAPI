@@ -20,6 +20,25 @@ var roles = new ConnectRoles({
   }
 });
 
+roles.use('admin user', function (req) {
+  if(!req.user) { return false; }
+    if(req.user.hasAnyRole('admin')) {
+      console.log('admin true');
+      return true;
+    }
+});
+
+roles.use('user user', function (req) {
+  if(!req.user) { return false; }
+  return true;
+});
+
+roles.use(function (req) {
+  if(req.user.hasAnyRole('admin')) {
+    return true;
+  }
+});
+
 // Database
 mongoose.connect('mongodb://IMarks:pikapika@ds031852.mlab.com:31852/pokedex');
 //mongoose.connect('mongodb://localhost:27017/assessment');

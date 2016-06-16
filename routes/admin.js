@@ -2,15 +2,16 @@ var express = require('express');
 var router = express.Router();
 var controller = require('../controller/userController.js');
 var location = require('mongoose').model('Location');
+var auth = require('../controller/auth');
 
 /* GET home page. */
-router.get('/', isLoggedIn, function(req, res, next) {
+router.get('/', isLoggedIn, auth.isAllowed('Admin'), function(req, res, next) {
 	res.render('admin/index', {
 		"title" : 'Pokemon locatie beheer'
 	});
 });
 
-router.get('/locationlist', function(req, res){
+router.get('/locationlist', auth.isAllowed('Admin'), function(req, res){
 	location.find({}).exec(function(e, docs){
 		if(e) return res.status(500).json('error occured');
 
@@ -18,7 +19,7 @@ router.get('/locationlist', function(req, res){
 	})
 });
 
-router.post('/addlocation', function(req, res){
+router.post('/addlocation', auth.isAllowed('Admin'), function(req, res){
 	console.log(req.body);
 
 	var newlocation = new location(req.body);
@@ -36,7 +37,7 @@ router.post('/addlocation', function(req, res){
 	});*/
 });
 
-router.delete('/deletelocation/:id', function(req, res){
+router.delete('/deletelocation/:id', auth.isAllowed('Admin'), function(req, res){
 	var locationToDelete = req.params.id;
 	location.remove({ 'pid' : locationToDelete}).exec(function(err){
 		res.send((err === null) ? { msg: '' } : { msg:'error: ' + err });
