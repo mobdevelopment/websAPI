@@ -47,7 +47,9 @@ router.post('/login', passport.authenticate('local-login'), function (req, res) 
         res.json(response);
     });
 });
-
+// =====================================
+// FACEBOOK ROUTES =====================
+// =====================================
 // route got the facebook authentication and login
 router.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
@@ -55,6 +57,18 @@ router.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email'
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 	successRedirect: '/profileData',
 	failureRedirect: '/'
+}));
+
+// =====================================
+// TWITTER ROUTES ======================
+// =====================================
+// route for twitter authentication and login
+app.get('/auth/twitter', passport.authenticate('twitter'));
+
+// handle the callback after twitter has authenticated the user
+app.get('/auth/twitter/callback', passport.authenticate('twitter', {
+	successRedirect : '/profileData',
+	failureRedirect : '/'
 }));
 
 
@@ -107,15 +121,13 @@ router.get('/connect/facebook/callback', passport.authorize('facebook', {
 // twitter --------------------------------
 
 // send to twitter to do the authentication
-// router.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
+router.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
 
-// // handle the callback after twitter has authorized the user
-// router.get('/connect/twitter/callback',
-// 	passport.authorize('twitter', {
-// 		successRedirect : '/profile',
-// 		failureRedirect : '/'
-// 	}));
-
+// handle the callback after twitter has authorized the user
+router.get('/connect/twitter/callback',	passport.authorize('twitter', {
+	successRedirect : '/profile',
+	failureRedirect : '/'
+}));
 
 // google ---------------------------------
 
@@ -156,13 +168,13 @@ router.get('/unlink/facebook', function(req, res) {
 });
 
 // twitter --------------------------------
-// router.get('/unlink/twitter', function(req, res) {
-//     var user           = req.user;
-//     user.twitter.token = undefined;
-//     user.save(function(err) {
-//        res.redirect('/profileData');
-//     });
-// });
+router.get('/unlink/twitter', function(req, res) {
+	var user           = req.user;
+	user.twitter.token = undefined;
+	user.save(function(err) {
+		res.redirect('/profileData');
+	});
+});
 
 // google ---------------------------------
 router.get('/unlink/google', function(req, res) {
