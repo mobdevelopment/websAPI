@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+	#content.col-md-12
+		#content.col-md-12
+			h1 Authenticate
+			
+	#main.col-md-12
+		div.col-md-4
+			a.btn.btn-default(href='login')
+				span
+				|	Local Login
+			p.
+			a.btn.btn-default(href='register')
+				span
+				|	Local Signup
+			p.
+			a.btn.btn-default(href='/auth/facebook')
+				span
+				|	Facebook Login
+			p.
+			a.btn.btn-default(href='/auth/google')
+				span
+				|	Google+ Login

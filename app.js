@@ -23,9 +23,18 @@ var roles = new ConnectRoles({
 // Database
 mongoose.connect('mongodb://IMarks:pikapika@ds031852.mlab.com:31852/pokedex');
 //mongoose.connect('mongodb://localhost:27017/assessment');
+var db = mongoose.connection;
+
+db.on('error', function (msg) {
+  console.log("db connection failed.");
+});
+
+db.once('open', function() {
+  console.log("db connection succeeded.");
+});
 
 require('./model/user')(mongoose);
-require('./model/roles')(mongoose);
+require('./model/role')(mongoose);
 require('./model/location')(mongoose);
 require('./model/pokemon')(mongoose);
 require('./model/type')(mongoose);

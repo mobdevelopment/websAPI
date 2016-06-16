@@ -1,0 +1,46 @@
+extends ../layout
+
+block content
+	#content.col-md-12
+		#content.col-md-12
+			h1 User information
+			
+	#main.col-md-12
+		div.col-md-4
+			h2 Local information
+			span
+			|	id: #{user.id}
+			p.
+			span
+			|	username: #{user.local.username}
+			p.
+			span
+			|	password: #{user.local.password}
+		div.col-md-4
+			h2 Facebook information
+			span
+			|	id: #{user.facebook.id}
+			p.
+			span
+			|	token: #{user.facebook.token}
+			p.
+			span
+			|	email: #{user.facebook.email}
+			p.
+			span
+			|	name: #{user.facebook.name}
+
+		div.col-md-4
+			h2 Google+ information
+			span
+			|	id: #{user.google.id}
+			p.
+			span
+			|	token: #{user.google.token}
+			p.
+			span
+			|	email: #{user.google.email}
+			p.
+			span
+			|	name: #{user.google.name}
+
