@@ -38,6 +38,7 @@ router.get('/signup', function(req, res, next) {
 });
 
 router.post('/signup', passport.authenticate('local-signup'), function (req, res) {
+	console.log(res);
 		res.status(201).json({'message':'account created succesful'});
 	});
 
