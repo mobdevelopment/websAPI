@@ -28,6 +28,8 @@ roles.use('admin user', function (req) {
     }
 });
 
+
+
 roles.use('user user', function (req) {
   if(!req.user) { return false; }
   return true;
@@ -94,6 +96,8 @@ app.use(cookieParser());
 app.use(expressSession({secret: "pikapika", saveUninitialized: true, resave: false}));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// var auth = require('./controller/auth');
 
 app.use('/', routes);
 app.use('/users', users);
