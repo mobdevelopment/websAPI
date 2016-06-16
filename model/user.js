@@ -26,7 +26,7 @@ var userSchema = new Schema({
 		name: { type: String, required: false },
 	},
 	pokemons: [{ type: Schema.Types.ObjectId, ref: 'Pokemon'}],
-	Admin: Boolean
+	Admin: { type: Boolean, required: true, default: true }
 });
 
 // userSchema.path('username').required(true, 'username cannot be empty');
@@ -41,8 +41,8 @@ userSchema.methods.validPassword = function(password) {
 	return bcrypt.compareSync(password, this.local.password);
 }
 
-userSchema.methods.hasAnyRole = function(role) {
-	if(!Array.isArray)
-}
+// userSchema.methods.hasAnyRole = function(role) {
+// 	if(!Array.isArray)
+// }
 
 module.exports = mongoose.model('User', userSchema);
