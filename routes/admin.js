@@ -11,6 +11,12 @@ router.get('/', isLoggedIn, auth.isAllowed('Admin'), function(req, res, next) {
 	});
 });
 
+router.get('/users', isLoggedIn, auth.isAllowed('Admin'), function(req, res, next) {
+	res.render('admin/users', {
+		"title" : 'Gebruikersbeheer',
+	});
+});
+
 router.get('/locationlist', auth.isAllowed('Admin'), function(req, res){
 	location.find({}).exec(function(e, docs){
 		if(e) return res.status(500).json('error occured');
