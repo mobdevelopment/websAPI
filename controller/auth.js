@@ -4,7 +4,7 @@ exports.isAllowed = function(role) {
 	return function(req, res, next) {
 		if(req.isAuthenticated()) {
 			if (role == 'Admin') {
-				if(req.user.isAdmin) {
+				if(req.user.Admin) {
 					return next();
 				} else {
 					return showError('not allowed to access this', 401, req, res);
@@ -27,14 +27,14 @@ function showError(errMsg, code, req, res){
     } else {
         res.render('error', {
             message: errMsg,
-            error: code
+            error: {status: code, stack: req.user }
         });
     }
 }
 
 // Check if user is admin or not
 exports.isAdmin = function(req, res, next){
-    if (req.user.isAdmin){
+    if (req.user.Admin){
         return res.json({message: 'succes', isAdmin: true});
     } else {
         return res.json({message: 'succes', isAdmin: false});

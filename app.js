@@ -1,3 +1,5 @@
+console.log('http::/localhost:3000');
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -27,8 +29,6 @@ roles.use('admin user', function (req) {
       return true;
     }
 });
-
-
 
 roles.use('user user', function (req) {
   if(!req.user) { return false; }
