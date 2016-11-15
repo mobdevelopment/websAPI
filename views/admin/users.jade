@@ -1,8 +1,40 @@
 extends ../layout
 
 block content	
-	include ./header
+	//include ./header
 	include ./sidebar
 	
-	#main.col-md-8
-		h2 Content
+	#main.col-md-10
+		h2 Gebruikers
+		#usersList
+			table.table.table-bordered.table-striped.table-hover.table-condensed
+				thead
+					tr
+						th Naam
+						th Is beheerder
+						th Verwijderen
+				tbody
+
+		// add location
+		h2 Voeg gebruiker toe
+		form.form-horizontal#addUser
+			div.form-group
+				label.col-sm-2.control-label(for='inputUserName') Gebruikersnaam
+				div.col-sm-10
+					input.form-control#inputUserName(type='text', placeholder='Name')
+			div.form-group
+				label.col-sm-2.control-label(for='inputUserPass') Wachtwoord
+				div.col-sm-10
+					input.form-control#inputUserPass(type='password', placeholder='Password')
+			div.form-group
+				div.col-sm-offset-2.col-sm-10
+					div.checkbox
+					label
+						input#inputUserAdmin(type='checkbox')
+						|  Is admin?
+			div.form-group
+				div.col-sm-offset-2.col-sm-10
+					button.btn.btn-primary#btnAddUser(type='submit') Opslaan
+
+
+	script(src='/javascripts/users.js')
