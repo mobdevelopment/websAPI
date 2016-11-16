@@ -81,34 +81,6 @@ router.delete('/pokemon/:id', auth.isAllowed('Admin'), function(req, res){
 	});
 });
 
-/********************************
- * Old pokemon location section *
- ********************************/
-router.get('/locationlist', auth.isAllowed('Admin'), function(req, res){
-	location.find({}).exec(function(e, docs){
-		if(e) return res.status(500).json('error occured');
-
-  		res.json(docs);
-	});
-});
-
-router.post('/addlocation', auth.isAllowed('Admin'), function(req, res){
-	console.log(req.body);
-
-	var newlocation = new location(req.body);
-
-	newlocation.save(function(err, doc){
-		res.status(200).send((err === null) ? { msg: '' } : { msg: err});
-	});
-});
-
-router.delete('/deletelocation/:id', auth.isAllowed('Admin'), function(req, res){
-	var locationToDelete = req.params.id;
-	location.remove({ 'pid' : locationToDelete}).exec(function(err){
-		res.send((err === null) ? { msg: '' } : { msg:'error: ' + err });
-	});
-});
-
 /*********************
  * Private functions *
  *********************/

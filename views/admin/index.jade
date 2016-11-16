@@ -1,47 +1,8 @@
 extends ../layout
 
-block content
-	h1= title
-
-	#wrapper
-
-		// Location info
-		#locationInfo
-		h2 Location info
-		p
-			strong Id:
-			|	<span id='locationInfoPid'></span>
-			br
-			strong Name:
-			|	<span id='locationInfoName'></span>
-			br
-			strong Lat:
-			|	<span id='locationInfoLat'></span>
-			br
-			strong Lng:
-			|	<span id='locationInfoLng'></span>
-
-		// Location list
-		h2 Location List
-		#locationList
-			table
-				thead
-					tr
-						th pid
-						th name
-						th lat
-						th lng
-						th Delete?
-				tbody
-
-		// add location
-		h2 Add location
-		#addLocation
-			fieldset
-				input#inputLocationPid(type='text', placeholder='Pokemon id')
-				input#inputLocationName(type='text', placeholder='Name')
-				br
-				input#inputLocationLat(type='text', placeholder='Lat')
-				input#inputLocationLng(type='text', placeholder='Lng')
-				br
-				button#btnAddLocation Add location
+block content	
+	//include ./header
+	include ./sidebar
+	
+	#main.col-md-10
+		h2 Beheerpaneel
