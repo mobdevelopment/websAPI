@@ -34,9 +34,9 @@ describe('Testing the pokemon route', function(){
 		});
 	});
 
-	describe('no valid request', function(){
+	describe('invalid request', function(){
 		it('should throw an internal server error aka 500', function(done){
-			makeRequest(route+'notanid', 500, done);
+			makeRequest(route, 500, done());
 		});
 	})
 
