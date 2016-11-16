@@ -45,7 +45,14 @@ router.post('/signup', passport.authenticate('local-signup'), function (req, res
 router.post('/login', passport.authenticate('local-login'), function (req, res) {
     controller.getToken(req.user.local, 'supersecrethere', function(response) {
     	req.session.token = response.token;
-        res.json(response);
+    	if (response.success)
+    	{
+    		if (req.user.Admin)
+				res.redirect('/admin');
+    		else
+    			res.redirect('/');
+    	}
+        res.render('users/login');
     });
 });
 // =====================================
