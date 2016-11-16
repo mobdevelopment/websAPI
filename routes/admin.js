@@ -12,13 +12,17 @@ router.get('/', isLoggedIn, auth.isAllowed('Admin'), function(req, res, next) {
 	});
 });
 
+/**********************
+ * Admin User Section *
+ **********************/
+
 router.get('/users', isLoggedIn, auth.isAllowed('Admin'), function(req, res, next) {
 	res.render('admin/users', {
 		"title" : 'Gebruikersbeheer',
 	});
 });
 
-router.get('/userlist', auth.isAllowed('Admin'), function(req, res){
+router.get('/user', auth.isAllowed('Admin'), function(req, res){
 	user.find({}).exec(function(e, docs){
 		if(e) return res.status(500).json('error occured');
 
@@ -27,9 +31,6 @@ router.get('/userlist', auth.isAllowed('Admin'), function(req, res){
 });
 
 router.post('/user', auth.isAllowed('Admin'), function(req, res){
-	console.log('\033[2J'); // Clear the console
-	console.log(req.body);
-
 	var newuser = new user();
 
 	newuser.local.username = req.body.username;
@@ -48,12 +49,47 @@ router.delete('/user/:id', auth.isAllowed('Admin'), function(req, res){
 	});
 });
 
+/**********************************
+ * Admin pokemon location section *
+ **********************************/
+router.get('/pokemons', isLoggedIn, auth.isAllowed('Admin'), function(req, res, next){
+	res.render('admin/pokemon', {
+		"title" : 'Pokemon locatie beheer',
+	})
+});
+
+router.get('/pokemon', auth.isAllowed('Admin'), function(req, res){
+	location.find({}).exec(function(e, docs){
+		if(e) return res.status(500).json('error occured');
+
+  		res.json(docs);
+	});
+});
+
+router.post('/pokemon', auth.isAllowed('Admin'), function(req, res){
+	var newlocation = new location(req.body);
+
+	newlocation.save(function(err, doc){
+		res.status(200).send((err === null) ? { msg: '' } : { msg: err});
+	});
+});
+
+router.delete('/pokemon/:id', auth.isAllowed('Admin'), function(req, res){
+	var locationToDelete = req.params.id;
+	location.remove({ '_id' : locationToDelete}).exec(function(err){
+		res.send((err === null) ? { msg: '' } : { msg:'error: ' + err });
+	});
+});
+
+/********************************
+ * Old pokemon location section *
+ ********************************/
 router.get('/locationlist', auth.isAllowed('Admin'), function(req, res){
 	location.find({}).exec(function(e, docs){
 		if(e) return res.status(500).json('error occured');
 
   		res.json(docs);
-	})
+	});
 });
 
 router.post('/addlocation', auth.isAllowed('Admin'), function(req, res){
@@ -72,6 +108,10 @@ router.delete('/deletelocation/:id', auth.isAllowed('Admin'), function(req, res)
 		res.send((err === null) ? { msg: '' } : { msg:'error: ' + err });
 	});
 });
+
+/*********************
+ * Private functions *
+ *********************/
 
 function isLoggedIn(req, res, next) {
 	controller.checkToken(req,'supersecrethere',next, function(response){

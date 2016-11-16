@@ -1,0 +1,43 @@
+extends ../layout
+
+block content	
+	//include ./header
+	include ./sidebar
+	
+	#main.col-md-10
+		h2 Pokemon locaties
+		#pokemonList
+			table.table.table-bordered.table-striped.table-hover.table-condensed
+				thead
+					tr
+						th pid
+						th Naam
+						th Lng
+						th Lat
+						th Verwijderen
+				tbody
+
+		// add location
+		h2 Voeg pokemon toe
+		form.form-horizontal#addPokemon
+			div.form-group
+				label.col-sm-2.control-label(for='inputPokemonId') Pokemon ID
+				div.col-sm-10
+					input.form-control#inputPokemonId(type='text', placeholder='Pokemon ID')
+			div.form-group
+				label.col-sm-2.control-label(for='inputPokemonName') Naam
+				div.col-sm-10
+					input.form-control#inputPokemonName(type='text', placeholder='Naam')
+			div.form-group
+				label.col-sm-2.control-label(for='inputLatitude') Latitude
+				div.col-sm-10
+					input.form-control#inputLatitude(type='text', placeholder='Lat')
+			div.form-group
+				label.col-sm-2.control-label(for='inputLongtitude') Longtitude
+				div.col-sm-10
+					input.form-control#inputLongtitude(type='text', placeholder='Lng')
+			div.form-group
+				div.col-sm-offset-2.col-sm-10
+					button.btn.btn-primary#btnAddPokemon(type='submit') Opslaan
+
+	script(src='/javascripts/pokemon.js')

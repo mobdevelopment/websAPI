@@ -22,7 +22,7 @@ function populateUserTable() {
     var userTableContent = '';
 
     // jQuery AJAX call for JSON
-    $.getJSON( '/admin/userlist', function( data ) {
+    $.getJSON( '/admin/user', function( data ) {
         userListData = data;
 
         // For each item in our JSON, add a table row and cells to the content string
