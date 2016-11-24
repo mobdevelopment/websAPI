@@ -1,49 +1,20 @@
-console.log('http::/localhost:3000');
-
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var passport = require('passport');
-var expressSession = require('express-session');
-var localStrategy = require('passport-local').Strategy;
-var ConnectRoles = require('connect-roles');
-var bCrypt = require('bcryptjs');
-var User;
-var location;
-
-var roles = new ConnectRoles({
-  failureHandler: function(req, res, event){
-    res.status(401);
-    res.render('noauth');
-  }
-});
-
-roles.use('admin user', function (req) {
-  if(!req.user) { return false; }
-    if(req.user.hasAnyRole('admin')) {
-      console.log('admin true');
-      return true;
-    }
-});
-
-roles.use('user user', function (req) {
-  if(!req.user) { return false; }
-  return true;
-});
-
-roles.use(function (req) {
-  if(req.user.hasAnyRole('admin')) {
-    return true;
-  }
-});
+var express         = require('express'),
+    path            = require('path'),
+    favicon         = require('serve-favicon'),
+    logger          = require('morgan'),
+    cookieParser    = require('cookie-parser'),
+    bodyParser      = require('body-parser'),
+    mongoose        = require('mongoose'),
+    passport        = require('passport'),
+    expressSession  = require('express-session'),
+    bCrypt          = require('bcryptjs'),
+    User,
+    location;
+// var localStrategy = require('passport-local').Strategy;
+// var ConnectRoles = require('connect-roles');
 
 // Database
 mongoose.connect('mongodb://IMarks:pikapika@ds031852.mlab.com:31852/pokedex');
-//mongoose.connect('mongodb://localhost:27017/assessment');
 var db = mongoose.connection;
 
 db.on('error', function (msg) {
@@ -65,12 +36,13 @@ function handleError(req, res, statusCode, message){
   res.json(message);
 }
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var map = require('./routes/map');
-var pokemons = require('./routes/pokemons');
-var types = require('./routes/types');
-var admin = require('./routes/admin');
+var indexRoute    = require('./routes/index');
+var userRoute     = require('./routes/users');
+var adminRoute    = require('./routes/admin');
+var mapRoute      = require('./routes/map');
+var pokemonRoute  = require('./routes/pokemons');
+var typeRoute     = require('./routes/types');
+// var chatRoute     = require('./routes/chat');
 
 var app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -98,13 +70,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // var auth = require('./controller/auth');
+var roles = require('./config/roles')();
 
-app.use('/', routes);
-app.use('/users', users);
-app.use('/map', map);
-app.use('/pokemon', pokemons);
-app.use('/type', types);
-app.use('/admin', admin);
+app.use('/', indexRoute);
+app.use('/users', userRoute);
+app.use('/admin', adminRoute);
+app.use('/map', mapRoute);
+app.use('/pokemon', pokemonRoute);
+app.use('/type', typeRoute);
+// app.use('/chat', chatRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

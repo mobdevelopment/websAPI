@@ -1,9 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var controller = require('../controller/userController.js');
-var location = require('mongoose').model('Location');
-var user = require('mongoose').model('User');
-var auth = require('../controller/auth');
+var express 	= require('express');
+var router 		= express.Router();
+var controller 	= require('../controller/userController.js');
+
+var auth 		= require('../controller/auth');
+var async		= require('async');
+var http		= require('http');
+
+var User 		= require('mongoose').model('User');
+var Roles		= require('mongoose').model('Role');
+var pokemon 	= require('mongoose').model('Pokemon');
+var PokeLocate  = require('mongoose').model('Location');
+
+// var location 	= require('mongoose').model('Location');
+// var user 		= require('mongoose').model('User');
+// var auth 		= require('../controller/auth');
 
 /* GET home page. */
 router.get('/', isLoggedIn, auth.isAllowed('Admin'), function(req, res, next) {

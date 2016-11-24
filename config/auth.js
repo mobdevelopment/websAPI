@@ -1,17 +1,22 @@
 module.exports = {
 	'facebookAuth' : {
-		'clientID' : '208086766252184',
-		'clientSecret' : '087bc351cb71155633a5b8be7c799668',
-		'callbackURL' : 'http://mobdevelopment.herokuapp.com/auth/facebook/callback'
+		'clientID' 		: '208086766252184',
+		'clientSecret' 	: '087bc351cb71155633a5b8be7c799668',
+		'callbackURL' 	: 'http://mobdevelopment.herokuapp.com/auth/facebook/callback'
 	},
 	'twitterAuth' : {
-		'consumerKey' : 'TuNpHucgOBqQrQlzSIeqyf4e6',
+		'consumerKey' 	: 'TuNpHucgOBqQrQlzSIeqyf4e6',
 		'consumerSecret': 'InKifQgJmq0Fp8Ctinw2KLoLdo9tJVoOYPxW6lk3qpvCrleoEm',
-		'callbackURL' : 'http://mobdevelopment.herokuapp.com/auth/twitter/callback'
+		'callbackURL' 	: 'http://mobdevelopment.herokuapp.com/auth/twitter/callback'
 	},
 	'googleAuth' : {
-		'clientID' : '73413103701-5jpfk2hcodo193s5e8mql1uq60td92ln.apps.googleusercontent.com',
-		'clientSecret' : 'UU22db0ptPGOWNegpQL8K7cG',
-		'callbackURL' : 'http://mobdevelopment.herokuapp.com/auth/google/callback'
+		'clientID' 		: '73413103701-5jpfk2hcodo193s5e8mql1uq60td92ln.apps.googleusercontent.com',
+		'clientSecret' 	: 'UU22db0ptPGOWNegpQL8K7cG',
+		'callbackURL' 	: 'http://mobdevelopment.herokuapp.com/auth/google/callback'
+	},
+	'githubAuth' : {
+		'clientID' 		: 	'c0166a1d58e03d446049',
+		'clientSecret' 	: 	'7a595acadc361275b950948bd781b84d21b1557a',
+		'callbackURL' 	: 	'http://mobdevelopment.herokuapp.com/auth/github/callback'
 	}
 };
